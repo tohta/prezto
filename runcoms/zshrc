@@ -136,7 +136,7 @@ fi
 #################################################
 ## GO
 ##################################################
-export GOPATH=$HOME
+export GOPATH=$HOME/.go
 export PATH=$PATH:$HOME/.go/bin
 
 
@@ -233,5 +233,26 @@ bindkey '^s' cool-peco-ssh # ctrl+h
 #################################################
 export PATH="$HOME/.anyenv/bin:$PATH"
 eval "$(anyenv init -)"
+for D in `ls $HOME/.anyenv/envs`
+do
+  export PATH="$HOME/.anyenv/envs/$D/shims:$PATH"
+done
 
-export PATH=$HOME/Library/Python/2.7/bin:$PATH
+
+#export PATH=$HOME/Library/Python/2.7/bin:$PATH
+
+
+#################################################
+# mssh
+#################################################
+
+function mssh() {
+tmux new-window "exec ssh $1"
+shift
+for host in "$@"; do
+  tmux split-window "exec ssh $host"
+  tmux select-layout tiled > /dev/null
+  # ${PROG_TMUX} select-layout even-vertical > /dev/null
+  # ${PROG_TMUX} select-layout even-horizontal > /dev/null
+done
+}
